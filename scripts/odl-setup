@@ -1,0 +1,2 @@
+feature:install odl-l2switch-switch
+feature:install odl-dlux-core odl-dluxapps-yangutils features-dlux odl-dluxapps-applications odl-dluxapps-yangvisualizer odl-dluxapps-topology odl-dluxapps-nodes

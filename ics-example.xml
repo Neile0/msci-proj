@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network>
+    <Name>Vessel w/ Closed Ballast System</Name>
+    <Controller Type="OpenDaylight"/>
+
+
+
+    <NetworkSection>
+        <Id>cn</Id>
+        <Name>Corporate Network</Name>
+
+        <Switch>
+            <Id>cn_s1</Id>
+            <Name>S1</Name>
+            <Links>
+                <Link To="cn_s2"/>
+                <Link To="cn_s3"/>
+            </Links>
+        </Switch>
+
+        <Switch>
+            <Id>s1</Id>
+            <Name>S1</Name>
+        </Switch>
+
+        <Switch>
+            <Id>cn_s2</Id>
+            <Name>S2</Name>
+            <Links>
+                <Link To="cn_s3"/>
+            </Links>
+        </Switch>
+
+        <Switch>
+            <Id>cn_s3</Id>
+            <Name>S3</Name>
+        </Switch>
+
+        <Devices>
+            <Device>
+                <Id>h1_1</Id>
+                <Name>Host 1</Name>
+                <Links>
+                    <Link To="s1"/>
+                </Links>
+            </Device>
+
+            <Device>
+                <Id>h2_1</Id>
+                <Name>Host 2</Name>
+                <Links>
+                    <Link To="s1"/>
+                </Links>
+            </Device>
+
+            <Device>
+                <Id>cn_loading</Id>
+                <Name>Loading Computer Workstation</Name>
+                <Links>
+                    <Link To="cn_s1"/>
+                </Links>
+            </Device>
+            <Device>
+                <Id>cn_w1</Id>
+                <Name>Workstation_1</Name>
+                <Links>
+                    <Link To="cn_s1"/>
+                </Links>
+            </Device>
+        </Devices>
+
+    </NetworkSection>
+
+    <NetworkSection>
+        <Id>scada</Id>
+        <Name>SCADA</Name>
+
+        <Switch>
+            <Id>scada_s1</Id>
+            <Name>S1</Name>
+        </Switch>
+
+        <Switch>
+            <Id>scada_s2</Id>
+            <Name>S2</Name>
+            <Links>
+                <Link To="scada_s1"/>
+            </Links>
+        </Switch>
+
+        <Switch>
+            <Id>scada_s3</Id>
+            <Name>S3</Name>
+            <Links>
+                <Link To="scada_s2"/>
+            </Links>
+        </Switch>
+
+        <Devices>
+            <Device>
+                <Id>scada_ser</Id>
+                <Name>SCADA Server</Name>
+                <Type>SCADA_Server</Type>
+                <Links>
+                    <Link To="scada_s1"/>
+                </Links>
+            </Device>
+
+            <Device>
+                <Id>scada_bal</Id>
+                <Name>Ballast Control</Name>
+                <Type>HMI</Type>
+                <Links>
+                    <Link To="scada_s2"/>
+                </Links>
+            </Device>
+
+            <Device>
+                <Id>scada_sta</Id>
+                <Name>Stability System</Name>
+                <Type>HMI</Type>
+                <Links>
+                    <Link To="scada_s2"/>
+                    <Link To="scada_mo"/>
+                </Links>
+            </Device>
+
+
+            <Device>
+                <Id>scada_mo</Id>
+                <Name>Motions Monitoring System</Name>
+                <Type>HMI</Type>
+                <Links>
+                    <Link To="scada_s2"/>
+                </Links>
+            </Device>
+
+            <Device>
+                <Id>scada_heli</Id>
+                <Name>Helideck Monitoring System</Name>
+                <Type>HMI</Type>
+                <Links>
+                    <Link To="scada_s3"/>
+                </Links>
+            </Device>
+        </Devices>
+    </NetworkSection>
+
+
+    <NetworkSection>
+        <Id>pn</Id>
+        <Name>Production Network</Name>
+
+        <Switch>
+            <Id>pn_s1</Id>
+            <Name>S1</Name>
+        </Switch>
+
+        <Devices>
+            <DeviceGroup>
+                <Id>10s</Id>
+                <Name>10S</Name>
+                <Device>
+                    <Id>pn_10s_plc</Id>
+                    <Name>PLC</Name>
+                    <Type>PLC</Type>
+                    <Script path="scripts/ballast_controller_plc.py"/>
+                    <Links>
+                        <Link To="pn_10s_tg"/>
+                        <Link To="pn_10s_mv"/>
+                        <Link To="pn_10s_p"/>
+                    </Links>
+                </Device>
+                <Device>
+                    <Id>pn_10s_tg</Id>
+                    <Name>TG</Name>
+                    <Type>TankGauge</Type>
+                </Device>
+                <Device>
+                    <Id>pn_10s_mv</Id>
+                    <Name>MV</Name>
+                    <Type>MotorisedValve</Type>
+                </Device>
+                <Device>
+                    <Id>pn_10s_p</Id>
+                    <Name>Pump</Name>
+                    <Type>Pump</Type>
+                </Device>
+            </DeviceGroup>
+        </Devices>
+    </NetworkSection>
+</Network>
